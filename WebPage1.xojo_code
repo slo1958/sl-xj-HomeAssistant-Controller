@@ -138,7 +138,7 @@ Begin WebPage WebPage1
       HasBorder       =   True
       HasHeader       =   True
       HeaderHeight    =   0
-      Height          =   360
+      Height          =   244
       HighlightSortedColumn=   True
       Index           =   -2147483648
       Indicator       =   ""
@@ -287,6 +287,37 @@ Begin WebPage WebPage1
       Top             =   152
       Visible         =   True
       Width           =   100
+      _mPanelIndex    =   -1
+   End
+   Begin ccSwitch ccSwitch1
+      ControlCount    =   0
+      ControlID       =   ""
+      CSSClasses      =   ""
+      Enabled         =   True
+      Height          =   40
+      Index           =   -2147483648
+      Indicator       =   0
+      LayoutDirection =   0
+      LayoutType      =   0
+      Left            =   20
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockHorizontal  =   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   False
+      LockVertical    =   False
+      PanelIndex      =   0
+      Scope           =   0
+      ScrollDirection =   0
+      TabIndex        =   10
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   584
+      Visible         =   True
+      Width           =   400
+      _mDesignHeight  =   0
+      _mDesignWidth   =   0
       _mPanelIndex    =   -1
    End
 End
