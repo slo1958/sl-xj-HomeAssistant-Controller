@@ -1,5 +1,5 @@
 #tag Class
-Protected Class cl_HAControler
+Protected Class cl_HAController
 	#tag Method, Flags = &h0
 		Sub Constructor(theServerURL as string)
 		  
@@ -57,7 +57,7 @@ Protected Class cl_HAControler
 		  
 		  if js.IsArray then
 		    var jsc as integer = js.count
-		     
+		    
 		    for i as integer = 0 to jsc - 1
 		      var item as variant = js.ValueAt(i)
 		      
@@ -149,7 +149,7 @@ Protected Class cl_HAControler
 		    end if
 		    
 		  catch
-		     
+		    
 		    
 		  end try
 		  
@@ -235,7 +235,7 @@ Protected Class cl_HAControler
 			Group="Behavior"
 			InitialValue=""
 			Type="string"
-			EditorType=""
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class
