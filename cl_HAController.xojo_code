@@ -1,9 +1,10 @@
 #tag Class
 Protected Class cl_HAController
 	#tag Method, Flags = &h0
-		Sub Constructor(theServerURL as string)
+		Sub Constructor(theServerURL as string, theHAToken as string)
 		  
 		  self.serverUrl = theServerURL
+		  self.loadedToken = theHAToken
 		  self.traceMode = False
 		  
 		  api_test_results = SendRequest("/api/","")
@@ -109,15 +110,6 @@ Protected Class cl_HAController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function GetToken() As string
-		  var k as String = HAToken.trim
-		  
-		  return k
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function SendRequest(endPoint as string, requestJSON as string) As string
 		  
 		  var c as new URLConnection
@@ -132,7 +124,7 @@ Protected Class cl_HAController
 		  
 		  if self.traceMode then System.DebugLog(tempURL)
 		  
-		  c.RequestHeader("Authorization") = "Bearer " + GetToken()
+		  c.RequestHeader("Authorization") = "Bearer " + self.loadedToken
 		  c.RequestHeader("content-type") = "application/json"
 		  
 		  try
@@ -177,6 +169,10 @@ Protected Class cl_HAController
 
 	#tag Property, Flags = &h21
 		Private lastRequestStatus As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private loadedToken As string
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

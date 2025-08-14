@@ -32,76 +32,7 @@ Begin WebPage WebPage1
    _ImplicitInstance=   False
    _mDesignHeight  =   0
    _mDesignWidth   =   0
-   _mName          =   ""
    _mPanelIndex    =   -1
-   Begin WebLabel Label1
-      Bold            =   False
-      ControlID       =   ""
-      CSSClasses      =   ""
-      Enabled         =   True
-      FontName        =   ""
-      FontSize        =   0.0
-      Height          =   38
-      Index           =   -2147483648
-      Indicator       =   ""
-      Italic          =   False
-      Left            =   20
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockHorizontal  =   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      LockVertical    =   False
-      Multiline       =   False
-      PanelIndex      =   0
-      Scope           =   0
-      TabIndex        =   0
-      TabStop         =   True
-      Text            =   "Home Assistant base URL"
-      TextAlignment   =   0
-      TextColor       =   &c000000FF
-      Tooltip         =   ""
-      Top             =   27
-      Underline       =   False
-      Visible         =   True
-      Width           =   100
-      _mPanelIndex    =   -1
-   End
-   Begin WebTextField TextField1
-      AllowAutoComplete=   False
-      AllowSpellChecking=   False
-      Caption         =   ""
-      ControlID       =   ""
-      CSSClasses      =   ""
-      Enabled         =   True
-      FieldType       =   0
-      Height          =   38
-      Hint            =   ""
-      Index           =   -2147483648
-      Indicator       =   ""
-      Left            =   167
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockHorizontal  =   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      LockVertical    =   False
-      MaximumCharactersAllowed=   0
-      PanelIndex      =   0
-      ReadOnly        =   False
-      Scope           =   0
-      TabIndex        =   1
-      TabStop         =   True
-      Text            =   "http://raspberrypi03.local:8123"
-      TextAlignment   =   0
-      Tooltip         =   ""
-      Top             =   27
-      Visible         =   True
-      Width           =   301
-      _mPanelIndex    =   -1
-   End
    Begin WebButton Button1
       AllowAutoDisable=   False
       Cancel          =   False
@@ -362,6 +293,20 @@ End
 #tag EndWebPage
 
 #tag WindowCode
+	#tag Event
+		Sub Opening()
+		  
+		  
+		  Listbox1.RemoveAllRows
+		  Listbox1.ColumnCount = 2
+		  
+		  Listbox1.AddRow(array("Server Token length", str(app.ServerToken.length)))
+		  ListBox1.AddRow(array("Server URL", app.ServerURL))
+		  
+		End Sub
+	#tag EndEvent
+
+
 	#tag Method, Flags = &h0
 		Sub AddEntityToListBox(Entity as cl_HAEntity)
 		  
@@ -416,7 +361,7 @@ End
 #tag Events Button1
 	#tag Event
 		Sub Pressed()
-		  var r as new cl_HAControler(TextField1.Text)
+		  var r as new cl_HAController(app.ServerURL, app.ServerToken)
 		  
 		  if cb_trace.Value then r.EnableTraceMode
 		  
@@ -437,7 +382,7 @@ End
 #tag Events Button2
 	#tag Event
 		Sub Pressed()
-		  var r as new cl_HAControler(TextField1.Text)
+		  var r as new cl_HAController(app.ServerURL, app.ServerToken)
 		  
 		  if cb_trace.Value then r.EnableTraceMode
 		  
@@ -460,7 +405,7 @@ End
 #tag Events Button3
 	#tag Event
 		Sub Pressed()
-		  var r as new cl_HAControler(TextField1.Text)
+		  var r as new cl_HAController(app.ServerURL, app.ServerToken)
 		  
 		  if cb_trace.Value then r.EnableTraceMode
 		  
@@ -482,7 +427,7 @@ End
 #tag Events Button4
 	#tag Event
 		Sub Pressed()
-		  var r as new cl_HAControler(TextField1.Text)
+		  var r as new cl_HAController(app.ServerURL, app.ServerToken)
 		  
 		  if cb_trace.Value then r.EnableTraceMode
 		  
@@ -503,7 +448,7 @@ End
 #tag Events Button5
 	#tag Event
 		Sub Pressed()
-		  var r as new cl_HAControler(TextField1.Text)
+		  var r as new cl_HAController(app.ServerURL, app.ServerToken)
 		  
 		  if cb_trace.Value then r.EnableTraceMode
 		  
