@@ -118,8 +118,6 @@ Begin WebPage WebPage3
       Period          =   1000
       RunMode         =   0
       Scope           =   0
-      TabIndex        =   2
-      TabStop         =   True
       _mPanelIndex    =   -1
    End
    Begin WebCheckbox Checkbox1
@@ -195,15 +193,15 @@ End
 		  
 		  for each e as cl_HAEntity in res 
 		    if e <>  nil then
-		      listbox1.AddRow(e.FriendlyName)
+		      listbox1.AddRow(e.friendlyName)
 		      
 		      var r as integer = Listbox1.LastAddedRowIndex
 		      ListBox1.CellTextAt(r, 1 ) = e.State
 		      //ListBox1.CellTextAt(r, 2 ) = "-"
 		      
-		      Listbox1.RowTagAt(r) = e.EntityID
+		      Listbox1.RowTagAt(r) = e.entityId
 		    end if
-		     
+		    
 		    
 		  next
 		  

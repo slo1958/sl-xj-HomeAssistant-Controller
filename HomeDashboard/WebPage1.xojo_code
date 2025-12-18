@@ -234,7 +234,7 @@ End
 		  var d() as string
 		  
 		  for each e as cl_HAEntity in res
-		    var tmp() as string = e.EntityID.Split(".")
+		    var tmp() as string = e.entityId.Split(".")
 		    
 		    if d.IndexOf(tmp(0)) < 0 then 
 		      d.Add(tmp(0))
@@ -269,16 +269,16 @@ End
 		  var sel as string = PopupMenu1.SelectedRowText
 		  
 		  for each e as cl_HAEntity in res
-		    var tmp() as string = e.EntityID.split(".")
+		    var tmp() as string = e.entityId.split(".")
 		    
 		    if sel = "(all)" or sel = tmp(0) then
-		      listbox1.AddRow(e.FriendlyName)
+		      listbox1.AddRow(e.friendlyName)
 		      
 		      var r as integer = Listbox1.LastAddedRowIndex
 		      ListBox1.CellTextAt(r, 1 ) = e.State
 		      ListBox1.CellTextAt(r, 2 ) = "-"
 		      
-		      Listbox1.RowTagAt(r) = e.EntityID
+		      Listbox1.RowTagAt(r) = e.entityId
 		      
 		    end if
 		    
@@ -311,8 +311,8 @@ End
 		  
 		  var c as cl_HAEntity = cl_HAEntity(me.RowTagAt(row))
 		  
-		  lb_name.Text = c.FriendlyName
-		  lb_entity.Text = c.EntityID
+		  lb_name.Text = c.friendlyName
+		  lb_entity.Text = c.entityId
 		  
 		  return
 		  
@@ -323,7 +323,7 @@ End
 	#tag Event
 		Sub Pressed()
 		  var hac as new cl_HAController(app.ServerURL, app.ServerToken)
-		   
+		  
 		  
 		  res =  hac.GetAllEntitiesAsEntities
 		  
@@ -631,6 +631,14 @@ End
 		Group="Behavior"
 		InitialValue=""
 		Type="Double"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="EnableListUpdates"
+		Visible=false
+		Group="Behavior"
+		InitialValue=""
+		Type="Boolean"
 		EditorType=""
 	#tag EndViewProperty
 #tag EndViewBehavior

@@ -74,7 +74,7 @@ Protected Class cl_HAController
 		  for i as integer = 0 to ret.LastIndex-1
 		    
 		    for j as integer = i+1 to ret.LastIndex
-		      if ret(i).FriendlyName > ret(j).FriendlyName then
+		      if ret(i).friendlyName > ret(j).friendlyName then
 		        var temp as cl_HAEntity = ret(i)
 		        ret(i) = ret(j)
 		        ret(j) = temp
@@ -92,9 +92,9 @@ Protected Class cl_HAController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function GetEntityHistory(EntityID as string) As string
+		Function GetEntityHistory(entityId as string) As string
 		  
-		  var requestString as string = "/api/history/period?filter_entity_id=" + EntityID
+		  var requestString as string = "/api/history/period?filter_entity_id=" + entityId
 		  
 		  Return self.SendRequest(requestString,"")
 		  
@@ -103,9 +103,9 @@ Protected Class cl_HAController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function GetEntityStatus(EntityID as string) As string
+		Function GetEntityStatus(entityId as string) As string
 		  
-		  var requestString as string = "/api/states/" + EntityID
+		  var requestString as string = "/api/states/" + entityId
 		  
 		  Return self.SendRequest(requestString,"")
 		  
@@ -113,10 +113,10 @@ Protected Class cl_HAController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function GetEntityStatusAsEntity(EntityID as string) As cl_HAEntity
+		Function GetEntityStatusAsEntity(entityId as string) As cl_HAEntity
 		  var ret as cl_HAEntity
 		  
-		  var tempReply as string = GetEntityStatus(EntityID)
+		  var tempReply as string = GetEntityStatus(entityId)
 		  
 		  ret = new cl_HAEntity(tempReply)
 		  
