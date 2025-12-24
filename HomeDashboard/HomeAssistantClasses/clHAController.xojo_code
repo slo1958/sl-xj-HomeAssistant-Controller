@@ -1,5 +1,5 @@
 #tag Class
-Protected Class cl_HAController
+Protected Class clHAController
 	#tag Method, Flags = &h0
 		Sub Constructor(theServerURL as string, theHAToken as string)
 		  
@@ -39,13 +39,13 @@ Protected Class cl_HAController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function GetAllEntitiesAsEntities() As cl_HAEntity()
+		Function GetAllEntitiesAsEntities() As clHAEntityState()
 		  
 		  var tempReply as string = GetAllEntities()
 		  
 		  var js as JSONItem
 		  
-		  var ret() as cl_HAEntity
+		  var ret() as clHAEntityState
 		  
 		  try
 		    js = new JSONItem(tempReply)
@@ -62,7 +62,7 @@ Protected Class cl_HAController
 		    for i as integer = 0 to jsc - 1
 		      var item as variant = js.ValueAt(i)
 		      
-		      if item isa JSONItem then   ret.Add(new cl_HAEntity(JSONItem(item)))
+		      if item isa JSONItem then   ret.Add(new clHAEntityState(JSONItem(item)))
 		      
 		    next
 		    
@@ -75,7 +75,7 @@ Protected Class cl_HAController
 		    
 		    for j as integer = i+1 to ret.LastIndex
 		      if ret(i).friendlyName > ret(j).friendlyName then
-		        var temp as cl_HAEntity = ret(i)
+		        var temp as clHAEntityState = ret(i)
 		        ret(i) = ret(j)
 		        ret(j) = temp
 		        
@@ -113,12 +113,12 @@ Protected Class cl_HAController
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function GetEntityStatusAsEntity(entityId as string) As cl_HAEntity
-		  var ret as cl_HAEntity
+		Function GetEntityStatusAsEntity(entityId as string) As clHAEntityState
+		  var ret as clHAEntityState
 		  
 		  var tempReply as string = GetEntityStatus(entityId)
 		  
-		  ret = new cl_HAEntity(tempReply)
+		  ret = new clHAEntityState(tempReply)
 		  
 		  return ret
 		  

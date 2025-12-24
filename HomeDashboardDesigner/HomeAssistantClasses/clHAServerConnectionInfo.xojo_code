@@ -1,7 +1,7 @@
-#tag Module
-Protected Module Module1
+#tag Class
+Protected Class clHAServerConnectionInfo
 	#tag Method, Flags = &h0
-		Function FindServerInfo() As FolderItem
+		Shared Function FindServerInfo() As FolderItem
 		  var fs as FolderItem = app.ExecutableFile
 		  var fn as string = "HAServer.txt"
 		  
@@ -22,6 +22,15 @@ Protected Module Module1
 		  
 		End Function
 	#tag EndMethod
+
+
+	#tag Property, Flags = &h0
+		ServerToken As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		ServerURL As String
+	#tag EndProperty
 
 
 	#tag ViewBehavior
@@ -65,6 +74,22 @@ Protected Module Module1
 			Type="Integer"
 			EditorType=""
 		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ServerToken"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="ServerURL"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
 	#tag EndViewBehavior
-End Module
-#tag EndModule
+End Class
+#tag EndClass

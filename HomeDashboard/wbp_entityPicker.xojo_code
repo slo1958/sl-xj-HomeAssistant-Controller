@@ -1,12 +1,12 @@
 #tag WebPage
-Begin WebPage WebPage3
+Begin WebPage wbp_entityPicker
    AllowTabOrderWrap=   True
    Compatibility   =   ""
    ControlCount    =   0
    ControlID       =   ""
    CSSClasses      =   ""
    Enabled         =   False
-   Height          =   400
+   Height          =   584
    ImplicitInstance=   True
    Index           =   -2147483648
    Indicator       =   0
@@ -28,32 +28,32 @@ Begin WebPage WebPage3
    Title           =   "Untitled"
    Top             =   0
    Visible         =   True
-   Width           =   600
+   Width           =   1024
    _ImplicitInstance=   False
    _mDesignHeight  =   0
    _mDesignWidth   =   0
    _mPanelIndex    =   -1
    Begin WebListBox ListBox1
       AllowRowReordering=   False
-      ColumnCount     =   2
-      ColumnWidths    =   ""
+      ColumnCount     =   3
+      ColumnWidths    =   "60%,30%,10%"
       ControlID       =   ""
       CSSClasses      =   ""
-      DefaultRowHeight=   49
+      DefaultRowHeight=   32
       Enabled         =   True
       GridLineStyle   =   3
       HasBorder       =   True
       HasHeader       =   True
       HeaderHeight    =   0
-      Height          =   273
-      HighlightSortedColumn=   True
+      Height          =   295
+      HighlightSortedColumn=   False
       Index           =   -2147483648
       Indicator       =   0
       InitialValue    =   ""
       LastAddedRowIndex=   0
       LastColumnIndex =   0
       LastRowIndex    =   0
-      Left            =   30
+      Left            =   35
       LockBottom      =   False
       LockedInPosition=   False
       LockHorizontal  =   False
@@ -73,15 +73,15 @@ Begin WebPage WebPage3
       TabIndex        =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   10
+      Top             =   80
       Visible         =   True
-      Width           =   542
+      Width           =   906
       _mPanelIndex    =   -1
    End
-   Begin WebButton Button1
+   Begin WebButton btn_referesh
       AllowAutoDisable=   False
       Cancel          =   False
-      Caption         =   "Button"
+      Caption         =   "Refresh"
       ControlID       =   ""
       CSSClasses      =   ""
       Default         =   False
@@ -89,7 +89,7 @@ Begin WebPage WebPage3
       Height          =   38
       Index           =   -2147483648
       Indicator       =   0
-      Left            =   30
+      Left            =   35
       LockBottom      =   False
       LockedInPosition=   False
       LockHorizontal  =   False
@@ -100,36 +100,93 @@ Begin WebPage WebPage3
       Outlined        =   False
       PanelIndex      =   0
       Scope           =   0
-      TabIndex        =   1
+      TabIndex        =   2
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   311
+      Top             =   393
       Visible         =   True
       Width           =   100
       _mPanelIndex    =   -1
    End
-   Begin WebTimer Timer1
-      ControlID       =   ""
-      Enabled         =   True
-      Index           =   -2147483648
-      Location        =   0
-      LockedInPosition=   False
-      PanelIndex      =   0
-      Period          =   1000
-      RunMode         =   0
-      Scope           =   0
-      _mPanelIndex    =   -1
-   End
-   Begin WebCheckbox Checkbox1
-      Caption         =   "auto"
+   Begin WebLabel lb_entity
+      Bold            =   False
       ControlID       =   ""
       CSSClasses      =   ""
       Enabled         =   True
-      Height          =   34
-      Indeterminate   =   False
+      FontName        =   "Arial"
+      FontSize        =   12.0
+      Height          =   22
       Index           =   -2147483648
       Indicator       =   ""
-      Left            =   472
+      Italic          =   False
+      Left            =   35
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockHorizontal  =   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      LockVertical    =   False
+      Multiline       =   False
+      PanelIndex      =   0
+      Scope           =   0
+      TabIndex        =   3
+      TabStop         =   True
+      Text            =   "Untitled"
+      TextAlignment   =   0
+      TextColor       =   &c000000FF
+      Tooltip         =   ""
+      Top             =   448
+      Underline       =   False
+      Visible         =   True
+      Width           =   601
+      _mPanelIndex    =   -1
+   End
+   Begin WebLabel lb_name
+      Bold            =   False
+      ControlID       =   ""
+      CSSClasses      =   ""
+      Enabled         =   True
+      FontName        =   "Arial"
+      FontSize        =   12.0
+      Height          =   22
+      Index           =   -2147483648
+      Indicator       =   0
+      Italic          =   False
+      Left            =   35
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockHorizontal  =   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      LockVertical    =   False
+      Multiline       =   False
+      PanelIndex      =   0
+      Scope           =   0
+      TabIndex        =   4
+      TabStop         =   True
+      Text            =   "Untitled"
+      TextAlignment   =   0
+      TextColor       =   &c000000FF
+      Tooltip         =   ""
+      Top             =   478
+      Underline       =   False
+      Visible         =   True
+      Width           =   601
+      _mPanelIndex    =   -1
+   End
+   Begin WebPopupMenu PopupMenu1
+      ControlID       =   ""
+      CSSClasses      =   ""
+      Enabled         =   True
+      Height          =   38
+      Index           =   -2147483648
+      Indicator       =   0
+      InitialValue    =   ""
+      LastAddedRowIndex=   0
+      LastRowIndex    =   0
+      Left            =   35
       LockBottom      =   False
       LockedInPosition=   False
       LockHorizontal  =   False
@@ -138,50 +195,68 @@ Begin WebPage WebPage3
       LockTop         =   True
       LockVertical    =   False
       PanelIndex      =   0
+      RowCount        =   0
       Scope           =   0
-      TabIndex        =   2
+      SelectedRowIndex=   0
+      SelectedRowText =   ""
+      TabIndex        =   5
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   311
-      Value           =   False
+      Top             =   20
       Visible         =   True
-      Width           =   100
+      Width           =   392
       _mPanelIndex    =   -1
    End
 End
 #tag EndWebPage
 
 #tag WindowCode
-	#tag Method, Flags = &h0
-		Function GetEntities() As string()
-		  Return array("binary_sensor.ms04_office_occupancy"_
-		  ,"sensor.sk05_laundry_voltage" _
-		  ,"switch.sk11_tortoise_switch" _
-		  )
+	#tag Event
+		Sub Opening()
+		  Listbox1.HeaderAt(0) = "Name"
+		  Listbox1.HeaderAt(1) = "Value"
+		  Listbox1.HeaderAt(2) = "Sel."
 		  
-		End Function
-	#tag EndMethod
+		  
+		  Listbox1.Style.FontSize = 12
+		  
+		  PopupMenu1.Style.FontSize = 12
+		  
+		End Sub
+	#tag EndEvent
+
 
 	#tag Method, Flags = &h0
-		Sub Refreshstates()
-		  var lst() as string = GetEntities
+		Sub refreshPopup()
 		  
-		  res.RemoveAll
+		  EnableListUpdates = false
 		  
-		  var hac as new cl_HAController(app.ServerURL, app.ServerToken)
+		  var d() as string
 		  
-		  Listbox1.RemoveAllRows
-		  
-		  for each e as string in lst
-		    Listbox1.AddRow("Polling " + e)
-		    var z as cl_HAEntity =  hac.GetEntityStatusAsEntity(e)
+		  for each e as clHAEntityState in res
+		    var tmp() as string = e.entityId.Split(".")
 		    
-		    if z <> nil then res.Add(z)
+		    if d.IndexOf(tmp(0)) < 0 then 
+		      d.Add(tmp(0))
+		      
+		    end if
 		    
 		  next
 		  
-		  UpdateListBox
+		  d.Sort
 		  
+		  
+		  PopupMenu1.RemoveAllRows
+		  
+		  PopupMenu1.AddRow("(all)")
+		  
+		  PopupMenu1.AddAllRows(d)
+		  
+		  EnableListUpdates = true
+		  
+		  PopupMenu1.SelectRowWithText("(all)")
+		  
+		  return
 		End Sub
 	#tag EndMethod
 
@@ -189,19 +264,23 @@ End
 		Sub UpdateListBox()
 		  Listbox1.RemoveAllRows
 		  
+		  if not EnableListUpdates then Return
 		  
+		  var sel as string = PopupMenu1.SelectedRowText
 		  
-		  for each e as cl_HAEntity in res 
-		    if e <>  nil then
+		  for each e as clHAEntityState in res
+		    var tmp() as string = e.entityId.split(".")
+		    
+		    if sel = "(all)" or sel = tmp(0) then
 		      listbox1.AddRow(e.friendlyName)
 		      
 		      var r as integer = Listbox1.LastAddedRowIndex
 		      ListBox1.CellTextAt(r, 1 ) = e.State
-		      //ListBox1.CellTextAt(r, 2 ) = "-"
+		      ListBox1.CellTextAt(r, 2 ) = "-"
 		      
 		      Listbox1.RowTagAt(r) = e.entityId
+		      
 		    end if
-		    
 		    
 		  next
 		  
@@ -210,37 +289,59 @@ End
 
 
 	#tag Property, Flags = &h0
-		res() As cl_HAEntity
+		EnableListUpdates As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		res() As clHAEntityState
 	#tag EndProperty
 
 
 #tag EndWindowCode
 
-#tag Events Button1
+#tag Events ListBox1
 	#tag Event
-		Sub Pressed()
-		  Refreshstates
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events Timer1
-	#tag Event
-		Sub Run()
-		  Refreshstates
+		Sub DoublePressed(row As Integer, column As Integer)
+		  
+		  lb_name.Text = ""
+		  lb_entity.Text = ""
+		  
+		  if row < 0 then Return
+		  if row > me.LastRowIndex then return
+		  
+		  var c as clHAEntityState = clHAEntityState(me.RowTagAt(row))
+		  
+		  lb_name.Text = c.friendlyName
+		  lb_entity.Text = c.entityId
+		  
+		  return
 		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events Checkbox1
+#tag Events btn_referesh
 	#tag Event
-		Sub ValueChanged()
-		  if me.Value then
-		    timer1.RunMode = WebTimer.RunModes.Multiple
-		    
-		  else
-		    timer1.RunMode = WebTimer.RunModes.Off
-		    
-		  end if
+		Sub Pressed()
+		  var hac as new clHAController(app.ServerURL, app.ServerToken)
+		  
+		  
+		  res =  hac.GetAllEntitiesAsEntities
+		  
+		  refreshPopup
+		  
+		  UpdateListBox
+		  
+		  return 
+		  
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PopupMenu1
+	#tag Event
+		Sub SelectionChanged(item As WebMenuItem)
+		  UpdateListBox
+		  
 		  
 		End Sub
 	#tag EndEvent
@@ -530,6 +631,14 @@ End
 		Group="Behavior"
 		InitialValue=""
 		Type="Double"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="EnableListUpdates"
+		Visible=false
+		Group="Behavior"
+		InitialValue=""
+		Type="Boolean"
 		EditorType=""
 	#tag EndViewProperty
 #tag EndViewBehavior

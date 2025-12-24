@@ -1,5 +1,5 @@
 #tag Class
-Protected Class cl_HAEntity
+Protected Class clHAEntityState
 	#tag Method, Flags = &h0
 		Sub Constructor(JSONSrc as JSONItem)
 		  
@@ -46,7 +46,7 @@ Protected Class cl_HAEntity
 		  // 2025-12-18T12:29:27.385665+00:00
 		  
 		  if sourceStr.IndexOf("T") > 0 and sourceStr.IndexOf(".") > sourceStr.IndexOf("T") and sourceStr.IndexOf("+") > sourceStr.IndexOf(".")  then
-		     
+		    
 		    var tmp0() as string = sourceStr.Split("T")
 		    var tmp1() as String = tmp0(1).Split(".")
 		    var tmp2() as string = tmp1(1).Split("+")
@@ -129,6 +129,8 @@ Protected Class cl_HAEntity
 		                    "id":"01K2J1EAWZ9AEH2SXE3NB3NGBM","parent_id":null,"user_id":null
 		                    }
 		}
+		
+		
 	#tag EndNote
 
 
@@ -138,6 +140,10 @@ Protected Class cl_HAEntity
 
 	#tag Property, Flags = &h0
 		entityId As string
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		extraInformation As string
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -241,6 +247,22 @@ Protected Class cl_HAEntity
 			InitialValue=""
 			Type="string"
 			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="deviceClass"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="String"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="lastUpdated"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="string"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class
