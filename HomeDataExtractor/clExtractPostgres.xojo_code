@@ -6,20 +6,36 @@ Inherits clExtractBase
 		  
 		  self.Connectinfo = NewConnectInfo
 		  
-		  self.ExtractDataQuery = "SELECT      st.metadata_id ,    mean, min, max, last_reset, state, sum "_
-		  + ",    to_char(to_timestamp(st.created_ts), 'yyyy-mm-dd HH24:MI'::text) AS created_as_char   "_
-		  + ",    extract(timezone from to_timestamp(st.created_ts)) AS created_timezone  "_
-		  + ",    to_char(to_timestamp(st.created_ts), 'yyyy-mm-dd'::text) AS created_date_as_char   "_
-		  + ",    to_char(to_timestamp(st.created_ts), 'HH24:MI'::text) AS created_time_as_char   "_
-		  + ",    to_char(to_timestamp(st.start_ts), 'yyyy-mm-dd HH24:MI'::text) AS start_as_char   "_
+		  var temp as string = "SELECT      st.metadata_id ,    mean, min, max, last_reset, state, sum, mean_weight  "_
+		  + ",    to_char(to_timestamp(st.$_ts), 'yyyy-mm-dd HH24:MI'::text) AS datetime_as_char   "_
+		  + ",    extract(timezone from to_timestamp(st.$_ts)) AS datetime_timezone  "_
+		  + ",    to_char(to_timestamp(st.$_ts), 'yyyy-mm-dd'::text) AS datetime_date_as_char   "_
+		  + ",    to_char(to_timestamp(st.$_ts), 'HH24:MI'::text) AS datetime_time_as_char   "_
 		  + ",    to_char(to_timestamp(st.last_reset_ts), 'yyyy-mm-dd HH24:MI'::text) AS last_reset_as_char  "_
-		  + ",    to_char(to_timestamp(st.created_ts), 'yyyy-mm'::text) AS created_yearmonth_as_char   "_
-		  + ",    to_char(to_timestamp(st.created_ts), 'yyyy'::text) AS created_year_as_char   "_
+		  + ",    to_char(to_timestamp(st.$_ts), 'yyyy-mm'::text) AS datetime_yearmonth_as_char   "_
+		  + ",    to_char(to_timestamp(st.$_ts), 'yyyy'::text) AS datetime_year_as_char   "_
+		  + ",    '$' as datetime_type " _
 		  + " FROM public.""statistics"" st   "
 		  
-		  self.ExtractMetadataQuery = "SELECT id AS  metadata_id, statistic_id, unit_of_measurement, has_mean, has_sum "_
-		  + " FROM public.statistics_meta"
 		  
+		  self.ExtractDataQueryOnCreated = temp.ReplaceAll("$", "created")
+		  self.ExtractDataQueryOnStart =  temp.ReplaceAll("$", "start")
+		  
+		  //id, created, "start", mean, min, max, last_reset, state, sum, metadata_id, created_ts, start_ts, last_reset_ts, mean_weight
+		  
+		  
+		  self.ExtractMetadataQuery = "SELECT id AS  metadata_id " _ 
+		  +  ", statistic_id " _
+		  +  ", unit_of_measurement " _
+		  +  ", name " _
+		  +  ", unit_class " _
+		  +  ", has_mean " _
+		  +  ", has_sum "_
+		  +  ", mean_type" _
+		  +  ", source" _
+		  +  " FROM public.statistics_meta"
+		  
+		  return
 		End Sub
 	#tag EndMethod
 
@@ -69,7 +85,7 @@ Inherits clExtractBase
 			Group="Behavior"
 			InitialValue=""
 			Type="String"
-			EditorType=""
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="ExtractDataQuery"

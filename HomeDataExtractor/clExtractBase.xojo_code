@@ -37,7 +37,7 @@ Protected Class clExtractBase
 		    
 		  end if
 		  
-		  return runQuery(self.ExtractDataQuery + whereClause)
+		  return runQuery(self.ExtractDataQueryOnStart + whereClause)
 		  
 		  
 		End Function
@@ -76,7 +76,11 @@ Protected Class clExtractBase
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		ExtractDataQuery As String
+		ExtractDataQueryOnCreated As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		ExtractDataQueryOnStart As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -126,7 +130,7 @@ Protected Class clExtractBase
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="ExtractDataQuery"
+			Name="ExtractDataQueryOnCreated"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
@@ -139,7 +143,7 @@ Protected Class clExtractBase
 			Group="Behavior"
 			InitialValue=""
 			Type="String"
-			EditorType=""
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

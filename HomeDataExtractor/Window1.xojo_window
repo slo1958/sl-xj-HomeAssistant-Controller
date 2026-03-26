@@ -11,7 +11,7 @@ Begin DesktopWindow Window1
    HasMaximizeButton=   True
    HasMinimizeButton=   True
    HasTitleBar     =   True
-   Height          =   550
+   Height          =   670
    ImplicitInstance=   True
    MacProcID       =   0
    MaximumHeight   =   32000
@@ -50,7 +50,7 @@ Begin DesktopWindow Window1
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   466
+      Top             =   277
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -95,7 +95,7 @@ Begin DesktopWindow Window1
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   240
+      Top             =   316
       Transparent     =   False
       Underline       =   False
       UnicodeMode     =   1
@@ -126,7 +126,7 @@ Begin DesktopWindow Window1
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
-      Height          =   200
+      Height          =   236
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
@@ -148,6 +148,7 @@ Begin DesktopWindow Window1
       Underline       =   False
       Visible         =   True
       Width           =   544
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin DesktopButton btn_getdata
@@ -163,7 +164,7 @@ Begin DesktopWindow Window1
       Height          =   20
       Index           =   -2147483648
       Italic          =   False
-      Left            =   460
+      Left            =   36
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   False
@@ -175,18 +176,105 @@ Begin DesktopWindow Window1
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   466
+      Top             =   523
       Transparent     =   False
       Underline       =   False
       Visible         =   True
       Width           =   120
+   End
+   Begin DesktopCheckBox cbx_exportraw
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Caption         =   "Export raw data"
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   179
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   False
+      Scope           =   0
+      TabIndex        =   4
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   523
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      VisualState     =   0
+      Width           =   150
+   End
+   Begin DesktopCheckBox cbx_join0
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Caption         =   "Combine data"
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   373
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   False
+      Scope           =   0
+      TabIndex        =   5
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   523
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      VisualState     =   0
+      Width           =   150
+   End
+   Begin DesktopCheckBox cbx_join1
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Caption         =   "Pivot data"
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   373
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   False
+      Scope           =   0
+      TabIndex        =   6
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   555
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      VisualState     =   0
+      Width           =   150
    End
 End
 #tag EndDesktopWindow
 
 #tag WindowCode
 	#tag Method, Flags = &h0
-		Function ExtractSelectedData(selectedID() as string) As clDataPool
+		Function ExtractSelectedData(prefix as string, selectedID() as string) As clDataPool
 		  
 		  
 		  var cnt as new clHADBConnectionInfo
@@ -196,7 +284,7 @@ End
 		  var retpool as new clDataPool
 		  
 		  for each dataID as string in selectedID
-		    var tn as string = "Meta_" + dataID.trim
+		    var tn as string = prefix + dataID.trim
 		    var rs as RowSet = db.GetStatistics("","",dataID)
 		    
 		    var tbl as new  clDataTable(new clDBReader(rs))
@@ -244,6 +332,126 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function JoinAndPivotDataSets(datasets as clDataPool, prefix as string, selectedID() as string) As clDataTable
+		  
+		  var metacolumns() as string = array( _
+		  "metadata_id" _
+		  , "statistic°_id" _
+		  , "unit_of_measurement" _
+		  , "name" _
+		  ,  "unit_class" _
+		  , "has_sum "_
+		  , "mean_type" _
+		  )
+		  
+		  var datacolumns() as string = array( _
+		  "metadata_id"_
+		  ,"datetime_as_char" _
+		  ,"mean" _
+		  ,"state" _
+		  ,"sum" _
+		  )
+		  
+		  var pivotcolumns() as string = array( _
+		  "mean" _
+		  ,"state" _
+		  ,"sum" _
+		  )
+		  
+		  
+		  var tm as clDataTable = datasets.Table(tbl_name_metadata)
+		  
+		  var tj as clDataTable = nil
+		  call tm.AddColumn(new clBooleanDataSerie("selected"))
+		  
+		  for each dataID as string in selectedID
+		    var tn as string = prefix + dataID.trim
+		    var tb as clDataTable = datasets.Table(tn)
+		    
+		    if tj = nil then
+		      tj = tb.SelectColumns(datacolumns).Clone.rename("temp")
+		      
+		    else
+		      tj.AddTableData(tb.SelectColumns(datacolumns))
+		      
+		    end if
+		    
+		  next
+		  
+		  // Convert metadata_id to string
+		  call tj.AddColumn(new clStringDataSerie("metadata_idstr", tj.GetColumn("metadata_id")))
+		  
+		  var pTransformer as new clPivotTransformer(tj, array("datetime_as_char"), "metadata_idstr", selectedID, pivotcolumns) 
+		  
+		  call pTransformer.Transform()
+		  
+		  var tr as clDataTable  = pTransformer.GetOutputTable()
+		  
+		  
+		  Return tr.Rename("PivotedResults")
+		  
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function JoinDataSets(datasets as clDataPool, prefix as string, selectedID() as string) As clDataTable
+		  
+		  var metacolumns() as string = array( _
+		  "metadata_id" _
+		  , "statistic°_id" _
+		  , "unit_of_measurement" _
+		  , "name" _
+		  ,  "unit_class" _
+		  , "has_sum "_
+		  , "mean_type" _
+		  )
+		  
+		  var datacolumns() as string = array( _
+		  "metadata_id"_
+		  ,"datetime_as_char" _
+		  ,"mean" _
+		  ,"state" _
+		  ,"sum" _
+		  )
+		  
+		  var pivotcolumns() as string = array( _
+		  "mean" _
+		  ,"state" _
+		  ,"sum" _
+		  )
+		  
+		  
+		  var tm as clDataTable = datasets.Table(tbl_name_metadata)
+		  
+		  var tj as clDataTable = nil
+		  call tm.AddColumn(new clBooleanDataSerie("selected"))
+		  
+		  for each dataID as string in selectedID
+		    var tn as string = prefix + dataID.trim
+		    var tb as clDataTable = datasets.Table(tn)
+		    
+		    if tj = nil then
+		      tj = tb.SelectColumns(datacolumns)
+		      
+		    else
+		      tj.AddTableData(tb.SelectColumns(datacolumns))
+		      
+		    end if
+		    
+		  next
+		  
+		  var tr as clDataTable = tj.OuterJoin(tm, array("metadata_id")).rename("results")
+		  
+		  
+		  Return tr
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub UpdateMetaListbox()
 		  
 		  lb_Metadata.RemoveAllRows
@@ -251,7 +459,7 @@ End
 		  if app.HAMetaData = nil then Return
 		  
 		  TableToListBox( app.HAMetaData, lb_Metadata, array("select","metadata_id","statistic_id","unit_of_measurement"), array("64","64","","128"))
-		   lb_Metadata.ColumnTypeAt(0) = DesktopListBox.CellTypes.CheckBox
+		  lb_Metadata.ColumnTypeAt(0) = DesktopListBox.CellTypes.CheckBox
 		  
 		  Return
 		  
@@ -269,6 +477,10 @@ End
 	#tag EndMethod
 
 
+	#tag Constant, Name = tbl_name_metadata, Type = String, Dynamic = False, Default = \"Metadata", Scope = Public
+	#tag EndConstant
+
+
 #tag EndWindowCode
 
 #tag Events btn_meta
@@ -280,6 +492,7 @@ End
 		  TextArea1.Text = ""
 		  
 		  app.HAMetaData = new clDataTable(new clDBReader(rs))
+		  app.HAMetaData.Rename(tbl_name_metadata)
 		  
 		  rs.close
 		  
@@ -326,6 +539,8 @@ End
 	#tag Event
 		Sub Pressed()
 		  
+		  const table_prefix = "data_"
+		  
 		  var selection() as string = getSelectedMetadataID(1)
 		  
 		  if selection.Count = 0 then
@@ -340,11 +555,33 @@ End
 		  WriteMessage("Preparing extraction of " + str(selection.Count) + "  " + s)
 		  
 		  WriteMessage("Fetching data...")
-		  var datasets as clDataPool = ExtractSelectedData(selection)
+		  var datasets as clDataPool = ExtractSelectedData(table_prefix, selection)
 		  
-		  WriteMessage("Exporting data...")
-		  datasets.SaveEachTable(new clTextWriter(SpecialFolder.Desktop, true, new clTextFileConfig(chr(9))))
-		   
+		  DataSets.Table = app.HAMetaData
+		  
+		  if cbx_exportraw.Value then
+		    WriteMessage("Exporting data...")
+		    datasets.SaveEachTable(new clTextWriter(SpecialFolder.Desktop, true, new clTextFileConfig(chr(9))))
+		    
+		  end if
+		  
+		  if cbx_join0.Value then 
+		    var joinedTable as clDataTable = joindatasets(datasets, table_prefix, selection)
+		    
+		    joinedTable.Save(new clTextWriter(SpecialFolder.Desktop.child("CombinedResults.csv"), true, new clTextFileConfig(chr(9))))
+		    
+		  end if
+		  
+		  
+		  if cbx_join1.Value then 
+		    //var joinedTable as clDataTable = joindatasets(datasets, table_prefix, selection)
+		    
+		    var joinedTable as clDataTable = JoinAndPivotDataSets(datasets, table_prefix, selection)
+		    
+		    joinedTable.Save(new clTextWriter(SpecialFolder.Desktop.child("pivotedResults.csv"), true, new clTextFileConfig(chr(9))))
+		    
+		  end if
+		  
 		  WriteMessage("Done.")
 		  
 		  return 
