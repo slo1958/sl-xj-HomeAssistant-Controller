@@ -102,6 +102,7 @@ Begin DesktopWindow Window1
       Underline       =   False
       Visible         =   True
       Width           =   386
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin DesktopRadioGroup rbg_outputoption
@@ -111,10 +112,10 @@ Begin DesktopWindow Window1
       FontName        =   "System"
       FontSize        =   0.0
       FontUnit        =   0
-      Height          =   76
+      Height          =   105
       Horizontal      =   False
       Index           =   -2147483648
-      InitialValue    =   "One output file = one input file\nCombine files in\nOne output file for each sensor"
+      InitialValue    =   "One output file = one input file\nCombine files in single file\nCombine files in pivoted file\nOne output file for each sensor"
       Italic          =   False
       Left            =   20
       LockBottom      =   False
@@ -213,7 +214,7 @@ Begin DesktopWindow Window1
       Hint            =   ""
       Index           =   -2147483648
       Italic          =   False
-      Left            =   238
+      Left            =   246
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
@@ -230,7 +231,7 @@ Begin DesktopWindow Window1
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   287
+      Top             =   293
       Transparent     =   False
       Underline       =   False
       ValidationMask  =   ""
@@ -262,7 +263,7 @@ Begin DesktopWindow Window1
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   369
+      Top             =   416
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -294,7 +295,7 @@ Begin DesktopWindow Window1
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   352
+      Top             =   417
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -334,7 +335,7 @@ Begin DesktopWindow Window1
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   351
+      Top             =   416
       Transparent     =   False
       Underline       =   False
       ValidationMask  =   ""
@@ -414,7 +415,34 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub processSelectedFiles(inputfiles() as FolderItem, outputPath as FolderItem, groupingfieldname as string)
+		Function PivotDataset(dataset as clDataTable) As clDataTable
+		  
+		  var entityFieldValues() as string
+		  var pivotColumns() as string
+		  var retainColumns() as string
+		  
+		  entityFieldValues = VariantToString(dataset.StringColumn(EntityField).Unique)
+		  
+		  pivotColumns.Add(ConvValueField)
+		  
+		  retainColumns.add(ConvTimeField)
+		  
+		  var pTransformer as new clPivotTransformer(dataset, retainColumns, entityField, entityFieldValues, pivotColumns) 
+		  
+		  call pTransformer.Transform()
+		  
+		  var tr as clDataTable  = pTransformer.GetOutputTable()
+		  
+		  return tr
+		  
+		  
+		  var s() as string = dataset.StringColumn(EntityField).UniqueAsString
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub processSelectedFiles(inputfiles() as FolderItem, outputPath as FolderItem, groupingfieldname as string, pivotOnEntities as boolean)
 		  
 		  //
 		  // Value expected in outputPath depends on the content of groupingFieldName
@@ -427,11 +455,16 @@ End
 		  // - A distinct output file is created for each distinct value in field groupingFieldname
 		  // - OutputPath contains the path to the folder where the files are saved
 		  //
-		   
-		  var sourcedata as clDataTable = nil
+		  
+		  var SourceData as clDataTable = nil
+		  var PreparedData as clDataTable
+		  var OutputData as clDataTable
 		  
 		  var currentoutput as FolderItem = outputPath
 		  var grpFieldValues() as variant
+		  
+		  var txConfig as new clTextFileConfig(chr(9))
+		  txConfig.UseLocalFormatting = true
 		  
 		  //
 		  // Load and combine all source files
@@ -444,10 +477,10 @@ End
 		    loadedData.Column(SourceField)=inputfile.Name
 		    
 		    if sourcedata = nil then
-		      sourcedata = loadedData
+		      SourceData = loadedData
 		      
 		    else
-		      sourcedata.AddTableData(loadedData)
+		      SourceData.AddTableData(loadedData)
 		      
 		    end if
 		    
@@ -455,13 +488,21 @@ End
 		  
 		  //
 		  // Update dataset
-		  var UpdatedData as clDataTable = TransformDataset(sourcedata)
+		  //
+		   PreparedData = TransformDatasetBeforePIvot(SourceData)
+		  
+		  if pivotOnEntities then
+		    PreparedData = PivotDataset(PreparedData)
+		    
+		  end if
+		  
+		  OutputData = TransformDatasetAfterPIvot(PreparedData)
 		  
 		  //
 		  // Generate the output file(s)
 		  //
 		  if groupingfieldname.Length > 0 then
-		    grpFieldValues = UpdatedData.StringColumn(groupingfieldname).Unique
+		    grpFieldValues = OutputData.StringColumn(groupingfieldname).Unique
 		    
 		    if not outputPath.Exists then
 		      outputPath.CreateFolder
@@ -470,26 +511,22 @@ End
 		    end if
 		    
 		    
-		    var txConfig as new clTextFileConfig(chr(9))
-		    txConfig.UseLocalFormatting = true
-		    
 		    for each selFieldValue as string in grpFieldValues
 		      var myOutputName as string = "Converted_" + selFieldValue
 		      
 		      if myOutputName.IndexOf(".csv") < 0 then myOutputName = myOutputName + ".csv"
 		      
 		      var myOutputFile as FolderItem = outputPath.Child(myOutputName)
-		      var selectedRows() as integer = UpdatedData.FindAllMatchingRowIndexes(groupingfieldname, selFieldValue)
+		      var selectedRows() as integer = OutputData.FindAllMatchingRowIndexes(groupingfieldname, selFieldValue)
 		      
-		      UpdatedData.SaveSelectedRowsWithoutIndex(new clTextWriter(myOutputFile, true, txConfig), selectedRows)
+		      OutputData.SaveSelectedRowsWithoutIndex(new clTextWriter(myOutputFile, true, txConfig), selectedRows)
 		      
 		    next
 		    
 		  else
-		    sourcedata.SaveWithoutIndex(new clTextWriter(outputPath, true))
+		    OutputData.SaveWithoutIndex(new clTextWriter(outputPath, true, txConfig))
 		    
 		  end if
-		  
 		  
 		  Return
 		  
@@ -516,20 +553,57 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function TransformDataset(dataset as clDataTable) As clDataTable
+		Function TransformDatasetAfterPIvot(dataset as clDataTable) As clDataTable
 		  
 		  //
 		  // Replace the timestamp (string) in UTC time with local time
 		  //
 		  // 2026-04-19T22:00:00.000Z
 		  //
-		  call dataset.AddColumn(new clDateTimeDataSerie(ConvTimeField, dataset.GetColumn(TimeField)))
-		  var dtcol as clDateTimeDataSerie = dataset.GetDateTimeColumn(ConvTimeField)
 		  
-		  call dataset.AddColumn(new clNumberDataSerie(ConvValueField, dataset.GetColumn(ValueField)))
+		  //var tempTable as clDataTable = dataset.Sort(array(TimeField))
 		  
+		  //call tempTable.AddColumn(new clDateTimeDataSerie(ConvTimeField, tempTable.GetColumn(TimeField)))
+		  
+		  //return tempTable
 		  
 		  return dataset
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function TransformDatasetBeforePIvot(dataset as clDataTable) As clDataTable
+		  //
+		  //
+		  //
+		  
+		  // Sorting the dataset on time
+		  var tempTable as clDataTable = dataset.Sort(array(TimeField))
+		  
+		  // Convert the Value field to number
+		  call tempTable.AddColumn(new clNumberDataSerie(ConvValueField, tempTable.GetColumn(ValueField)))
+		  
+		  // Convert the time field to dateTime
+		  call tempTable.AddColumn(new clDateTimeDataSerie(ConvTimeField, tempTable.GetColumn(TimeField)))
+		  
+		  return tempTable
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function VariantToString(v() as Variant) As string()
+		  var r() as string
+		  
+		  for each w as Variant in v
+		    r.Add(w)
+		    
+		  next
+		  
+		  Return r
+		  
 		End Function
 	#tag EndMethod
 
@@ -590,6 +664,7 @@ End
 		  var list() as FolderItem
 		  var output as FolderItem
 		  var grpFieldname as string
+		  var pivotOnEntities as boolean
 		  list = getSelectedFiles
 		  
 		  
@@ -598,15 +673,24 @@ End
 		  case 0 // individual files
 		    output = new FolderItem(txf_destinationFolder.text.trim)
 		    grpFieldname = SourceField
+		    pivotOnEntities = False
 		    
-		  case 1 // combine output
+		  case 1 // combine output as flat file
 		    output = new FolderItem(txf_destinationFolder.text.trim)
 		    output = Output.Child(txf_outputname.Text.trim)
 		    grpFieldname = ""
+		    pivotOnEntities = False
 		    
-		  case 2 // One file per sensor
+		  case 2 // combine and pivot
+		    output = new FolderItem(txf_destinationFolder.text.trim)
+		    output = Output.Child(txf_outputname.Text.trim)
+		    grpFieldname = ""
+		    pivotOnEntities = True
+		    
+		  case 3 // One file per sensor
 		    output = new FolderItem(txf_destinationFolder.text.trim)
 		    grpFieldname = EntityField
+		    pivotOnEntities = False
 		    
 		  case else
 		    output = nil
@@ -615,7 +699,7 @@ End
 		    
 		  end Select
 		  
-		  processSelectedFiles(list, output,grpFieldname)
+		  processSelectedFiles(list, output,grpFieldname, pivotOnEntities)
 		  
 		  MessageBox("Conversion completed.")
 		  
@@ -628,7 +712,7 @@ End
 	#tag Event
 		Sub Opening()
 		  
-		  me.text = SpecialFolder.Desktop.NativePath
+		  me.text = SpecialFolder.Desktop.child("Output").NativePath
 		  
 		  return 
 		  
